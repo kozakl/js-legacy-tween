@@ -16,7 +16,7 @@ class TweenManager
     static setMotionSpeed(value)
     {
         const n = TweenManager.tweens.length;
-        for (var i = 0; i < n; ++i)
+        for (let i = 0; i < n; ++i)
             if (TweenManager.tweens[i])
                 TweenManager.tweens[i].motionSpeed = value;
     }
@@ -108,7 +108,7 @@ class Delay extends TweenCore
         
         if (this.percent >= 1)
         {
-            var tComplete = this.complete;
+            let tComplete = this.complete;
             this.complete = null;
             if (tComplete)
             {
