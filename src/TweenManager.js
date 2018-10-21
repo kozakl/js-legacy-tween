@@ -81,7 +81,7 @@ class Delay extends TweenCore
     constructor()
     {
         super();
-        //protected private
+        //private
         this.delay = null;
     }
     
