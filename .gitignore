@@ -1,0 +1,12 @@
+# Dependencies
+node_modules/
+
+# Dist
+dist/
+
+# Testing
+coverage/
+
+# Others
+.idea/
+TODO.txt

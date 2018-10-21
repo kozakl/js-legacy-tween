@@ -1,0 +1,14 @@
+{
+  "name": "@kozakl/legacy-tween",
+  "version": "1.0.0",
+  "author": {
+    "name": "Luke Kozak",
+    "email": "kozakluke@gmail.com",
+    "url": "https://github.com/kozakl"
+  },
+  "scripts": {
+    "prebuild": "rm -rf dist/ && mkdir dist/",
+    "build": "cp package.json dist/ && cp -R src/* dist/",
+    "publish-dist": "yarn build && npm publish ./dist --access=public"
+  }
+}
