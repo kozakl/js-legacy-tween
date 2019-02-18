@@ -35,11 +35,32 @@ class TweenManager
         return delay;
     }
     
+    static delayFramesCall(frames, complete,
+                                   completeArg) {
+        const delay = TweenManager.delaysFramesPool.pop() || new DelayFrames();
+        delay.to(frames,
+            function(delay) {
+                TweenManager.remove(delay);
+                TweenManager.delaysFramesPool.push(delay);
+                complete(completeArg);
+            }, delay);
+        TweenManager.add(delay);
+        
+        return delay;
+    }
+    
     static stopDelay(delay)
     {
         TweenManager.remove(delay);
         if (TweenManager.delaysPool.indexOf(delay) === -1)
             TweenManager.delaysPool.push(delay);
+    }
+    
+    static stopDelayFrames(delay)
+    {
+        TweenManager.remove(delay);
+        if (TweenManager.delaysFramesPool.indexOf(delay) === -1)
+            TweenManager.delaysFramesPool.push(delay);
     }
     
     update(delta)
@@ -74,50 +95,5 @@ class TweenManager
 }
 
 TweenManager.delaysPool = [];
+TweenManager.delaysFramesPool = [];
 TweenManager.tweens = [];
-
-class Delay extends TweenCore
-{
-    constructor()
-    {
-        super();
-        //protected private
-        this.delay = null;
-    }
-    
-    to(duration, complete,
-                 completeArg) {
-        this.duration = duration;
-        this.complete = complete;
-        this.completeArg = completeArg;
-        this.time = 0;
-        this.percent = 0;
-    }
-    
-    update(delta)
-    {
-        if (this.delay)
-        {
-            this.time += delta * this.motionSpeed;
-            if (this.time < this.delay)
-                return;
-            this.time = 0;
-            this.delay = null;
-        }
-        this.tweenCoreUpdate(delta);
-        
-        if (this.percent >= 1)
-        {
-            let tComplete = this.complete;
-            this.complete = null;
-            if (tComplete)
-            {
-                if (this.completeArg)
-                    tComplete(this.completeArg);
-                else
-                    tComplete();
-                tComplete = null;
-            }
-        }
-    }
-}
