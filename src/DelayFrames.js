@@ -3,17 +3,17 @@ class DelayFrames extends TweenCore
     constructor()
     {
         super();
-        //protected private
+        //private
         this.frames = null;
         this.frame  = 0;
     }
     
     to(frames, complete,
                completeArg) {
-        this.frames      = frames;
-        this.complete    = complete;
+        this.frames = frames;
+        this.complete = complete;
         this.completeArg = completeArg;
-        this.frame       = 0;
+        this.frame = 0;
     }
     
     update(delta)
