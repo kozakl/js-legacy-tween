@@ -56,6 +56,13 @@ class TweenManager
             TweenManager.delaysPool.push(delay);
     }
     
+    static stopDelayFrames(delay)
+    {
+        TweenManager.remove(delay);
+        if (TweenManager.delaysFramesPool.indexOf(delay) === -1)
+            TweenManager.delaysFramesPool.push(delay);
+    }
+    
     update(delta)
     {
         var n = TweenManager.tweens.length,
