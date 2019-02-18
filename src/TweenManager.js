@@ -35,6 +35,20 @@ class TweenManager
         return delay;
     }
     
+    static delayFramesCall(frames, complete,
+                                   completeArg) {
+        const delay = TweenManager.delaysFramesPool.pop() || new DelayFrames();
+        delay.to(frames,
+            function(delay) {
+                TweenManager.remove(delay);
+                TweenManager.delaysFramesPool.push(delay);
+                complete(completeArg);
+            }, delay);
+        TweenManager.add(delay);
+        
+        return delay;
+    }
+    
     static stopDelay(delay)
     {
         TweenManager.remove(delay);
@@ -74,6 +88,7 @@ class TweenManager
 }
 
 TweenManager.delaysPool = [];
+TweenManager.delaysFramesPool = [];
 TweenManager.tweens = [];
 
 class Delay extends TweenCore
@@ -107,6 +122,45 @@ class Delay extends TweenCore
         this.tweenCoreUpdate(delta);
         
         if (this.percent >= 1)
+        {
+            let tComplete = this.complete;
+            this.complete = null;
+            if (tComplete)
+            {
+                if (this.completeArg)
+                    tComplete(this.completeArg);
+                else
+                    tComplete();
+                tComplete = null;
+            }
+        }
+    }
+}
+
+class DelayFrames extends TweenCore
+{
+    constructor()
+    {
+        super();
+        //protected private
+        this.frames = null;
+        this.frame  = 0;
+    }
+    
+    to(frames, complete,
+               completeArg) {
+        this.frames      = frames;
+        this.complete    = complete;
+        this.completeArg = completeArg;
+        this.frame       = 0;
+    }
+    
+    update(delta)
+    {
+        this.tweenCoreUpdate(delta);
+        
+        ++this.frame;
+        if (this.frame === this.frames)
         {
             let tComplete = this.complete;
             this.complete = null;
